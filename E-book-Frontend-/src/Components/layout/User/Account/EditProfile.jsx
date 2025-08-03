@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import * as Yup from 'yup'
 import { useFormik } from "formik";
 import { useEditUserInfoMutation } from '../../../../Services/Apis/UserApi'
+import ProfilePhotoUpload from './ProfilePhotoUpload';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -30,6 +31,9 @@ const EditProfile = () => {
     phone : "",
   })
 
+  // Debug: Log user data
+  console.log('EditProfile - userdata:', userdata);
+
   useEffect(() => {
     if (userdata) {
       setUserData(userdata)
@@ -38,9 +42,9 @@ const EditProfile = () => {
   
   const formik = useFormik({
     initialValues:{
-      username : userdata.username || "",
-      email : userdata.email ||  "",
-      phone : userdata.phone || "",
+      username : userdata?.username || "",
+      email : userdata?.email ||  "",
+      phone : userdata?.phone || "",
     },
     validationSchema : validationSchema,
     onSubmit: async (userData) => {
@@ -59,11 +63,28 @@ const EditProfile = () => {
     }
   })
 
+  // Show loading state if user data is not available
+  if (!userdata) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading user data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6 bg-white rounded-xl p-6 shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-900">
-        {isEditing ? "Update Details" : "User Details"}
-      </h2>
+    <div className="space-y-8">
+      {/* Profile Photo Upload Section */}
+      <ProfilePhotoUpload />
+      
+      {/* User Details Section */}
+      <div className="space-y-6 bg-white rounded-xl p-6 shadow-md">
+        <h2 className="text-2xl font-semibold text-gray-900">
+          {isEditing ? "Update Details" : "User Details"}
+        </h2>
 
       {isEditing ? (
         <form onSubmit={formik.handleSubmit}>
@@ -206,6 +227,7 @@ const EditProfile = () => {
           Update Profile
         </Button>
       )}
+      </div>
     </div>
   );
 };

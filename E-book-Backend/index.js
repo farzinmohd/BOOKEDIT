@@ -19,6 +19,7 @@ connectDB()
 // middleware
 
 app.use('/images',express.static(path.join(__dirname,'Public','images')));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
 app.use(express.json())
 const corsOption = {

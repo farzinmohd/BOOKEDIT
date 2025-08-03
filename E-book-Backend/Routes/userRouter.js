@@ -16,6 +16,9 @@ import {
   EditAddress,
   DeleteAddress,
   DeleteUserAccount,
+  UploadProfilePhoto,
+  DeleteProfilePhoto,
+  upload,
 } from "../Controllers/User/UserController.js";
 import {
   ProductDetails,
@@ -94,6 +97,8 @@ userRouter.post("/retry-payment", VerifyToken, retryingPayment);
 userRouter.post("/verify-retry", VerifyToken, verifyRetry);
 userRouter.post("/add-whishlist", VerifyToken, AddWhishList);
 userRouter.post("/add-wallet", VerifyToken, addWallet);
+userRouter.post("/upload-profile-photo", VerifyToken, upload.single('profilePhoto'), UploadProfilePhoto);
+userRouter.post("/delete-profile-photo", VerifyToken, DeleteProfilePhoto);
 userRouter.post("/return-order-order", verifyRetry, ReturnOrder)
 
 /**

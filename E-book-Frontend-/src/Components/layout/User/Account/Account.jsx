@@ -106,18 +106,18 @@ export default function Account() {
         <Card className="overflow-hidden">
           <CardContent>
             <div className="flex items-center space-x-4 sm:flex-col sm:items-start">
-              <Avatar
-                className="h-16 w-16 sm:h-12 sm:w-12"
-                src="/placeholder.svg?height=40&width=40"
-                alt={userData.username}
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="text-xl font-semibold text-gray-900 sm:text-center"
-                >
-                  Welcome, {userData.username}!
-                </Typography>
+                             <Avatar
+                 className="h-16 w-16 sm:h-12 sm:w-12"
+                 src={userData?.profilePhotoUrl ? `http://localhost:4040${userData.profilePhotoUrl}` : undefined}
+                 alt={userData?.username || 'User'}
+               />
+               <div>
+                 <Typography
+                   variant="h6"
+                   className="text-xl font-semibold text-gray-900 sm:text-center"
+                 >
+                   Welcome, {userData?.username || 'User'}!
+                 </Typography>
                 <Typography
                   variant="body2"
                   className="text-sm text-gray-500 sm:text-center"

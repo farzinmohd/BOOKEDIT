@@ -33,6 +33,12 @@ export const upload = multer({
   },
 });
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 
 /*
 user refreshing token 
@@ -620,6 +626,84 @@ const DeleteUserAccount = async (req, res) => {
   }
 };
 
+/**
+ * Upload profile photo
+ */
+const UploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Process the image with Sharp
+    const processedImage = await sharp(req.file.buffer)
+      .resize(300, 300, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 80 })
+      .toBuffer();
+
+    // Generate unique filename
+    const filename = `profile_${userId}_${Date.now()}.jpg`;
+    const filepath = path.join(uploadsDir, filename);
+
+    // Save the processed image
+    fs.writeFileSync(filepath, processedImage);
+
+    // Update user's profile photo URL
+    const profilePhotoUrl = `/uploads/${filename}`;
+    await User.findByIdAndUpdate(userId, { profilePhotoUrl });
+
+    res.status(200).json({ 
+      message: "Profile photo uploaded successfully",
+      profilePhotoUrl 
+    });
+
+  } catch (error) {
+    console.error("Error uploading profile photo:", error);
+    res.status(500).json({ message: "Failed to upload profile photo" });
+  }
+};
+
+/**
+ * Delete profile photo
+ */
+const DeleteProfilePhoto = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete the old file if it exists
+    if (user.profilePhotoUrl && user.profilePhotoUrl !== '') {
+      const oldFilePath = path.join(process.cwd(), user.profilePhotoUrl);
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+      }
+    }
+
+    // Clear the profile photo URL
+    await User.findByIdAndUpdate(userId, { profilePhotoUrl: '' });
+
+    res.status(200).json({ message: "Profile photo deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting profile photo:", error);
+    res.status(500).json({ message: "Failed to delete profile photo" });
+  }
+};
+
 export {
   Register,
   VerifyOtp,
@@ -636,4 +720,6 @@ export {
   EditAddress,
   DeleteAddress,
   DeleteUserAccount,
+  UploadProfilePhoto,
+  DeleteProfilePhoto,
 };

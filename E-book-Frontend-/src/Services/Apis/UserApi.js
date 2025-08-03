@@ -413,6 +413,34 @@ export const userApi = createApi({
         })
     }),
 
+    /**
+     * upload profile photo
+     */
+    uploadProfilePhoto: builder.mutation({
+        query: (formData) => ({
+            url: '/user/upload-profile-photo',
+            method: 'POST',
+            body: formData,
+            // Don't set Content-Type header for FormData
+            prepareHeaders: (headers) => {
+                headers.delete('Content-Type');
+                return headers;
+            },
+        }),
+        invalidatesTags: ['getUserProfile']
+    }),
+
+    /**
+     * delete profile photo
+     */
+    deleteProfilePhoto: builder.mutation({
+        query: () => ({
+            url: '/user/delete-profile-photo',
+            method: 'POST',
+        }),
+        invalidatesTags: ['getUserProfile']
+    }),
+
 // ----------
     })
 })
@@ -453,4 +481,6 @@ useGetTopProductsQuery,
 useGetTopCategoryQuery,
 useReturnOrderMutation,
 useDeleteAccountMutation,
+useUploadProfilePhotoMutation,
+useDeleteProfilePhotoMutation,
 } = userApi
