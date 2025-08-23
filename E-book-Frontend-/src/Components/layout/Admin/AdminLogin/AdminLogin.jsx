@@ -11,6 +11,14 @@ const validationSchema = Yup.object().shape({
     .email("invalid email format")
     .required("email is required"),
   password: Yup.string()
+    .test('no-whitespace-only', 'Password cannot contain only whitespace characters', function(value) {
+      if (!value) return true; // Let required validation handle empty values
+      return value.trim().length > 0;
+    })
+    .test('no-leading-trailing-whitespace', 'Password cannot start or end with whitespace', function(value) {
+      if (!value) return true;
+      return value === value.trim();
+    })
     .min(4, "password must be at least 4 characters")
     .required("password is required"),
 });

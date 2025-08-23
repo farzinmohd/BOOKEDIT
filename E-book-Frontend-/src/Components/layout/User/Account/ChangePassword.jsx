@@ -10,6 +10,14 @@ const validationSchema = Yup.object().shape({
     .min(4, "Password must be at least 4 characters")
     .required("password is required"),
   password: Yup.string()
+    .test('no-whitespace-only', 'Password cannot contain only whitespace characters', function(value) {
+      if (!value) return true; // Let required validation handle empty values
+      return value.trim().length > 0;
+    })
+    .test('no-leading-trailing-whitespace', 'Password cannot start or end with whitespace', function(value) {
+      if (!value) return true;
+      return value === value.trim();
+    })
     .matches(
       /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[0-9].*[0-9].*[0-9].*[0-9])/,
       "Password must cantain at least one special character and atleast four numbers"
