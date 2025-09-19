@@ -374,26 +374,26 @@ const OrderHistory = () => {
                       )
                     )}
 
-                    {order.status == "Delivered" && (
-                      <Button
-                       
-                        onClick={() =>
-
-                          handleOrderCancelOpenModal({
-                            order_id: order.orderId,
-                            product_id: order.productId,
-                            quantity: order.quantity,
-                            productName: order.productName,
-                            payment_id: order.payment_id,
-                            amount: order.payableAmount
-                          })
-                        }
-                        variant="outlined"
-                        color="primary"
-                      >
-                        Return
-                      </Button>
-                    )}
+                   {/*
+                   {order.status == "Delivered" && (
+                     <Button
+                       onClick={() =>
+                         handleOrderCancelOpenModal({
+                           order_id: order.orderId,
+                           product_id: order.productId,
+                           quantity: order.quantity,
+                           productName: order.productName,
+                           payment_id: order.payment_id,
+                           amount: order.payableAmount
+                         })
+                       }
+                       variant="outlined"
+                       color="primary"
+                     >
+                       Return
+                     </Button>
+                   )}
+                   */}
                   </Box>
                 </CardContent>
               </Card>
@@ -418,11 +418,17 @@ const OrderHistory = () => {
         />
       )}
 
+      {/**
+       * Return modal temporarily hidden from UI
+       * Keeping component and props for future re-enable
+       */}
+      {/**
       <OrderReturnModal
         isOpen={isOrderReturnModalOpen}
         onClose={handleOrderReturnCancelModal}
         onSubmit={handleSubmitOrderreturn}
       />
+      */}
     </div>
   );
 };
@@ -896,7 +902,7 @@ console.log("Order Price Check:",totalPrice);
                 <TableBody>
                   <TableRow>
                     <TableCell>Subtotal:</TableCell>
-                    <TableCell align="right">₹{order.price}.00</TableCell>
+                    <TableCell align="right">₹{order.price.toFixed(2)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Shipping:</TableCell>
@@ -909,7 +915,7 @@ console.log("Order Price Check:",totalPrice);
                   <TableRow>
                     <TableCell sx={{ color: "green" }}>Discount:</TableCell>
                     <TableCell align="right" sx={{ color: "green" }}>
-                    - ₹{totalDiscount}.00
+                    - ₹{totalDiscount.toFixed(2)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -925,7 +931,7 @@ console.log("Order Price Check:",totalPrice);
                       <strong>Total:</strong>
                     </TableCell>
                     <TableCell align="right">
-                      <strong>₹{totalPrice}.00</strong>
+                      <strong>₹{totalPrice.toFixed(2)}</strong>
                     </TableCell>
                   </TableRow>
                 </TableBody>
