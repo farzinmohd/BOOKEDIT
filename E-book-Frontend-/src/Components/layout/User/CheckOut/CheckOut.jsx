@@ -213,7 +213,7 @@ console.log('cartSave', cartSave.address_id)
                       <span>Subtotal</span>
                 
                       {/* <span>₹{cartItems[0]?.totalPrice || 0}.00</span> */}
-                      <span>₹{calculateTotal().toFixed(2)} .00</span>
+                      <span>₹{calculateTotal().toFixed(2)}</span>
 
                   
                     </div>
@@ -227,7 +227,7 @@ console.log('cartSave', cartSave.address_id)
                       <div>
 
                       {/* <span>₹{cartItems[0]?.totalPrice || 0}.00</span> */}
-                      <span>₹{calculateTotal().toFixed(2)}.00</span>
+                      <span>₹{calculateTotal().toFixed(2)}</span>
 
 
                       </div>

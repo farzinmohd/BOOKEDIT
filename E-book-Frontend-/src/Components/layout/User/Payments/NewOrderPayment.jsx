@@ -40,7 +40,8 @@ const NewOrderPayment = () => {
   const originalTotalPrice = calculateTotal();
   const totalPrice =
     originalTotalPrice - (couponDiscount / 100) * originalTotalPrice;
-  const totalDiscount = totalPrice - cartItems[0]?.totalPrice;
+  // Fix: Calculate total discount properly
+  const totalDiscount = (couponDiscount / 100) * originalTotalPrice;
 
   useEffect(() => {
     if (addressesData?.addresses) {
@@ -467,7 +468,7 @@ console.log('cartSave', cartSave)
                     <span>
                       {item.name} ({item.quantity})
                     </span>
-                    <span>₹{item.price}.00</span>
+                    <span>₹{item.price.toFixed(2)}</span>
                   </div>
                 ))}
 
@@ -475,7 +476,7 @@ console.log('cartSave', cartSave)
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
                     <span className={`${appliedCoupon ? "line-through" : ""}`}>
-                      {/* ₹{calculateTotalPrice()}.00 */}₹{calculateTotal()}.00
+                      {/* ₹{calculateTotalPrice()}.00 */}₹{calculateTotal().toFixed(2)}
                     </span>
                   </div>
 
@@ -483,7 +484,7 @@ console.log('cartSave', cartSave)
                     <span>Coupon</span>
 
                     {appliedCoupon ? (
-                      <span>₹{totalPrice}.00</span>
+                      <span>₹{totalPrice.toFixed(2)}</span>
                     ) : (
                       <span>₹0.00</span>
                     )}
@@ -498,7 +499,7 @@ console.log('cartSave', cartSave)
                   </div>
                   <div className="flex justify-between text-sm text-green-600">
                     <span>Total Discount</span>
-                    <span>-₹{totalDiscount}.00</span>
+                    <span>-₹{totalDiscount.toFixed(2)}</span>
                   </div>
                 </div>
                 <div className="border-t pt-3">
@@ -506,7 +507,7 @@ console.log('cartSave', cartSave)
                     <span>Total</span>
                     <span>
                       {/* ₹{appliedCoupon ? totalPrice : calculateTotalPrice()}.00 */}
-                      ₹{appliedCoupon ? totalPrice : calculateTotal()}.00
+                      ₹{appliedCoupon ? totalPrice.toFixed(2) : calculateTotal().toFixed(2)}
                     </span>
                     {/* <span>₹{calculateTotalPrice()}.00</span> */}
                   </div>
